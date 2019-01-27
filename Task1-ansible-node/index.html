@@ -81,6 +81,18 @@
     <li class="toctree-l2"><a href="#step-6-verify-python">Step 6: Verify Python</a></li>
     
 
+    <li class="toctree-l2"><a href="#step-7-install-pip">Step 7: Install PIP</a></li>
+    
+
+    <li class="toctree-l2"><a href="#step-8-verify-ansible">Step 8: Verify Ansible</a></li>
+    
+
+    <li class="toctree-l2"><a href="#step-9-create-ansible-inventory">Step 9: Create Ansible Inventory</a></li>
+    
+
+    <li class="toctree-l2"><a href="#step-10-ansible-role-structure">Step 10: Ansible role structure</a></li>
+    
+
     </ul>
 	    </li>
           
@@ -151,7 +163,7 @@
 <p><img alt="" src="../pic/1-1-1.png" /></p>
 <h4 id="step-2-enter-vpn-credentials">Step 2: Enter VPN credentials</h4>
 <p>After prompted for credentials, use the credentials provided by the lab admin.    <br />
-•   Below is an example of user logging into POD1</p>
+•   Below is an example of user logging into a reference POD:</p>
 <p><img alt="" src="../pic/1-2-vpn-credentials.png" /></p>
 <ul>
 <li>Hit accept when the prompt appears to accept the VPN connection login    </li>
@@ -181,6 +193,233 @@ Python 2.7.5
 <p>It is an important step as we need minimum 2.7.5 version of python in order to install some features for ansbile.  The output of above command confirms this version. </p>
 <p>Ansible can be run from any machine with Python 2 (versions 2.6 or 2.7) or Python 3 (versions 3.5 and higher) installed. </p>
 <p><img alt="" src="../pic/1-6-python.png" /></p>
+<h4 id="step-7-install-pip">Step 7: Install PIP</h4>
+<p>After verifying we have the minimum version of python installed, we are now going to Install PIP python package using <code>easy_install pip</code> command as shown below:</p>
+<pre><code>[root@rhel7-tools ~]# easy_install pip
+Searching for pip
+Best match: pip 8.1.1
+Adding pip 8.1.1 to easy-install.pth file
+Installing pip script to /usr/bin
+Installing pip3.5 script to /usr/bin
+Installing pip3 script to /usr/bin
+
+Using /usr/lib/python2.7/site-packages
+Processing dependencies for pip
+Finished processing dependencies for pip
+</code></pre>
+<p>Below screenshot shows the execution of above command:</p>
+<p><img alt="" src="../pic/1-6-2-python.png" /></p>
+<p>Next, update pip to latest version by executing below command:</p>
+<pre><code>[root@rhel7-tools ~]# pip install --upgrade pip
+</code></pre>
+<p>Below screenshot shows the exection of above command:</p>
+<p><img alt="" src="../pic/1-6-3-python.png" /></p>
+<p>After installing PIP package, we are going to add the relevant packages that are needed for this Ansible based VXLAN lab. Below are the packages required for this lab.  </p>
+<ul>
+<li>Paramiko</li>
+<li>PyYAML</li>
+<li>Jinj2</li>
+<li>Httplib2</li>
+</ul>
+<p>Run below command to install these packages:</p>
+<pre><code>[root@rhel7-tools ~]# pip install paramiko PyYAML jinja2 httplib2
+</code></pre>
+<p>Below screenshot shows the execution of above command:</p>
+<p><img alt="" src="../pic/1-6-4-python.png" /></p>
+<p>As a final step, we are going to install Ansible on this RHEL. Once the install is initiated with the below command, it will take few minutes for it to download and install.</p>
+<pre><code>[root@rhel7-tools ~]# pip install ansible==2.7.6
+</code></pre>
+<h4 id="step-8-verify-ansible">Step 8: Verify Ansible</h4>
+<p>After installation is complete, check Ansible version by executing command <code>ansible --version</code>, as shown below:</p>
+<pre><code>[root@rhel7-tools ~]# ansible --version 
+ansible 2.7.6
+  config file = None
+  configured module search path = [u'/root/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python2.7/site-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 2.7.5 (default, Apr  9 2015, 11:03:32) [GCC 4.8.3 20140911 (Red Hat 4.8.3-9)]
+[root@rhel7-tools ~]#
+</code></pre>
+<h4 id="step-9-create-ansible-inventory">Step 9: Create Ansible Inventory</h4>
+<p>Now, we are going to create inventory, host variables and Configuration file. This is important as Ansible works  against multiple systems in the system by selecting portions of systems listed in Ansible inventory. Similarly, configuration settings in Ansible are adjustable via configuration file.</p>
+<p>Create folder named LTRDCN-1572 as working environment and verify that it’s empty:</p>
+<pre><code>[root@rhel7-tools ~]# mkdir LTRDCN-1572 &amp;&amp; cd LTRDCN-1572
+[root@rhel7-tools LTRDCN-1572]# ls
+</code></pre>
+<p>Below screenshot shows the execution of above command:</p>
+<p><img alt="" src="../pic/1-9-1-dir.png" /></p>
+<p>Next:</p>
+<ul>
+<li>Create Ansible inventory file to include Spine and Leaf switches. </li>
+<li>By default Ansible has inventory file saved in location /etc/ansible/hosts. </li>
+<li>
+<p>In this lab we will create hosts file in the working environment. Use ‘vi’ to create inventory file ‘hosts’ as shown below:</p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# vi hosts
+</code></pre>
+</li>
+<li>
+<p>At the bottom of the inventory file, insert (type <code>i</code>) the following lines:</p>
+<pre><code>#define global variables, groups and host variables
+[all:vars]
+ansible_connection = local
+user=admin
+pwd=C1sco12345
+gather_fact=no
+[jinja2_spine]
+198.18.4.202
+[jinja2_leaf]
+198.18.4.104
+[spine]
+198.18.4.201
+[leaf]
+198.18.4.101
+198.18.4.103
+[server]
+198.18.134.50 eth1=172.21.140.10 gw=172.21.140.1
+198.18.134.52 eth1=172.21.140.11 gw=172.21.140.1
+198.18.134.53 eth1=172.21.141.11 gw=172.21.141.1
+[f5]
+198.18.4.10
+</code></pre>
+</li>
+<li>
+<p>Quit and save vi editor by press <code>Esc</code> key and then type <code>:wq!</code>  </p>
+<p>Below screenshot shows the execution of above command:
+<img alt="" src="../pic/1-9-2-inv.png" /></p>
+</li>
+<li>
+<p>Create Ansible config (ansible.cfg) file via vi editor pointing to local ‘hosts’ file for inventory. Use <code>vi ansible.cfg</code> to create this file as shown below:</p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# vi ansible.cfg
+</code></pre>
+</li>
+<li>
+<p>At the bottom of the ansible.cfg file, insert the below lines (by typing <code>i</code>):</p>
+<pre><code>[defaults]
+inventory = hosts
+host_key_checking = false
+record_host_key = true
+stdout_callback = debug
+</code></pre>
+</li>
+<li>
+<p>Quit and save vi editor by press <code>Esc</code> key and then type <code>:wq!</code>  </p>
+</li>
+<li>
+<p>Do <code>ls</code> to verify the file that you just created under project folder LTRDCN-1572.   </p>
+<p>Below screenshot shows the execution of above command:
+<img alt="" src="../pic/1-9-3-ls.png" /></p>
+</li>
+<li>
+<p>Create host variable folder named host_vars in folder LTRDCN-1572. Host varilables can be placed in different places in Ansible. In this lab, we will use host_vars for host variables:</p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# mkdir host_vars &amp;&amp; cd host_vars
+</code></pre>
+</li>
+<li>
+<p>Create host variable file for each host in inventory. Use <code>vi</code> to create following file: </p>
+<pre><code>[root@rhel7-tools host_vars]# vi 198.18.4.101.yml
+</code></pre>
+<p>In the file: add below data (by typing <code>i</code>):</p>
+</li>
+</ul>
+<pre><code class="YAML">---
+  hostname: leaf_1
+  loopback0: 192.168.0.8
+  loopback1: 192.168.0.18
+  router_id: 192.168.0.8
+</code></pre>
+
+<ul>
+<li>
+<p>Quit and save vi editor by pressing <code>Esc</code> key and then type <code>:wq!</code>   </p>
+</li>
+<li>
+<p>Create a new host variable file for next host in inventory. Use <code>vi</code> to create following file: </p>
+<pre><code>[root@rhel7-tools host_vars]# vi 198.18.4.103.yml
+</code></pre>
+<p>In the file: add below data (by typing <code>i</code>):</p>
+</li>
+</ul>
+<pre><code class="YAML">---
+  hostname: leaf_3
+  loopback0: 192.168.0.10
+  loopback1: 192.168.0.110
+  router_id: 192.168.0.10
+</code></pre>
+
+<ul>
+<li>
+<p>Quit and save vi editor by pressing <code>Esc</code> key and then type <code>:wq!</code>   </p>
+</li>
+<li>
+<p>Create a new host variable file for next host in inventory. Use <code>vi</code> to create following file: </p>
+<pre><code>[root@rhel7-tools host_vars]# vi 198.18.4.104.yml
+</code></pre>
+<p>In the file: add below data (by typing <code>i</code>):</p>
+</li>
+</ul>
+<pre><code class="YAML">---
+  hostname: leaf_4
+  loopback0: 192.168.0.11
+  loopback1: 192.168.0.111
+  router_id: 192.168.0.11
+</code></pre>
+
+<ul>
+<li>
+<p>Quit and save vi editor by pressing <code>Esc</code> key and then type <code>:wq!</code>   </p>
+</li>
+<li>
+<p>Create a new host variable file for next host in inventory. Use <code>vi</code> to create following file: </p>
+<pre><code>[root@rhel7-tools host_vars]# vi 198.18.4.201.yml
+</code></pre>
+<p>In the file: add below data (by typing <code>i</code>):</p>
+</li>
+</ul>
+<pre><code class="YAML">---
+  hostname: spine-1
+  loopback0: 192.168.0.6
+  loopback1: 192.168.0.100
+  router_id: 192.168.0.6
+</code></pre>
+
+<ul>
+<li>
+<p>Quit and save vi editor by press <code>Esc</code> key and then type <code>:wq!</code> </p>
+</li>
+<li>
+<p>Create a new host variable file for next host in inventory. Use <code>vi</code> to create following file: </p>
+<pre><code>[root@rhel7-tools host_vars]# vi 198.18.4.202.yml
+</code></pre>
+<p>In the file: add below data (by typing <code>i</code>):</p>
+</li>
+</ul>
+<pre><code class="YAML">---
+  hostname: spine-2
+  loopback0: 192.168.0.7 
+  loopback1: 192.168.0.100
+  router_id: 192.168.0.7
+</code></pre>
+
+<ul>
+<li>Quit and save vi editor by press <code>Esc</code> key and then type <code>:wq!</code> </li>
+</ul>
+<h4 id="step-10-ansible-role-structure">Step 10: Ansible role structure</h4>
+<p>Role is very useful technique to manage a set of playbooks in Ansible. 
+In this lab, we will use two different playbooks to manage configuration for Spine and Leaf switches. </p>
+<p>We will use role structure and manage the two plays into single playbook. 
+A role directory structure contains several directories of defaults, vars, files, handlers, meta, tasks and templates. </p>
+<p>In this lab:</p>
+<ul>
+<li>we will use vars, templates and tasks folders <code>/vars</code> </li>
+<li>main.yml file in vars folder contains dictionary of variables for this role <code>/tasks</code></li>
+<li>main.yml file in tasks folder contains the Ansible playbook for this role</li>
+</ul>
+<p>To proceed further in the new:</p>
+<p>•   Create roles directory in folder LTRDCN-1572 by issuing below commands:</p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# cd /root/LTRDCN-1572
+[root@rhel7-tools LTRDCN-1572]# mkdir roles
+</code></pre>
+<p>This will be used in the lab later.</p>
               
             </div>
           </div>

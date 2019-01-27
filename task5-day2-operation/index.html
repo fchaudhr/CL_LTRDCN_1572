@@ -655,7 +655,7 @@ Leaf-4(config)# end
 
 <p><img alt="" src="../pic/5-4-2.png" /></p>
 <ul>
-<li>Edit playbook file <code>main.yml</code> for <strong>“vni_provision”</strong> role under <strong>“/root/LTRDCN-1572/roles/vni_provision/tasks”</strong> and enter below data.   Make sure to click <code>File</code> and <code>Save</code> on Atom to push this to Ansible server:</li>
+<li>Edit playbook file <code>mail.yml</code> for <strong>“vni_provision”</strong> role under <strong>“/root/LTRDCN-1572/roles/vni_provision/tasks”</strong> and enter below data.   Make sure to click <code>File</code> and <code>Save</code> on Atom to push this to Ansible server:</li>
 </ul>
 <hr />
 <p><font style=background-color:yellow>Note: It is recommended to write your playbook and learn from mistakes, but file is also available in the box folder if you prefer to reuse.</font> </p>
@@ -732,11 +732,10 @@ Leaf-4(config)# end
 <p><img alt="" src="../pic/5-4-4.png" /></p>
 </li>
 <li>
-<p>Switch to <strong>MTPutty</strong> and connect to <strong>leaf-4</strong> (SSH connection0, verify the change on leaf switches using command <code>show nve vni</code>. Notice the new created L2VNI. </p>
+<p>Switch to <strong>MTPutty</strong> and connect to <strong>leaf-4</strong> (SSH connection0, verify the change on leaf switches using command <strong>show nve vni</strong>. Notice the new created L2VNI. </p>
 <p><img alt="" src="../pic/5-4-5.png" /></p>
 </li>
 </ul>
-<hr />
 <h1 id="congratulation-you-have-completed-vxlan-fabric-lab">Congratulation! You have completed VXLAN Fabric Lab.</h1>
               
             </div>
