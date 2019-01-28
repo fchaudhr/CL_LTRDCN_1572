@@ -456,8 +456,9 @@
 </li>
 <li>
 <p>After the configuration push is successful, <strong>login</strong> (on MTputty SSH session) to <strong>leaf-1, leaf-3 or leaf-4</strong> or <strong>spine-1</strong> switch to verify configuration has been pushed by running below command and BGP neighbours are operational:</p>
-<p><code>show ip bgp summary</code></p>
-<p>the output of above command is shown below:</p>
+<pre><code>show ip bgp summary
+</code></pre>
+<p>The output of above command is shown below:</p>
 <p><img alt="" src="../pic/4-3-3.png" />
 <img alt="" src="../pic/4-3-4.png" /></p>
 </li>
@@ -619,7 +620,8 @@ nxos_pim_interface  Manage PIM interface configuration</p>
 <li><strong>Click</strong> <code>File</code> and <code>Save</code> . This will save the playbook, and also ftp the playbook to Ansible server using pre-configured “<strong>remote-sync</strong>” package. </li>
 </ul>
 <h5 id="run-the-playbook-and-verify-configuration-changes">Run the playbook and verify configuration changes</h5>
-<p><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml --tags "multicast"</code></p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml --tags "multicast"
+</code></pre>
 <p>Below screenshots shows the output of above command:</p>
 <p><img alt="" src="../pic/4-4-1.png" />
 <img alt="" src="../pic/4-4-2.png" /></p>
@@ -844,7 +846,8 @@ nxos_pim_interface  Manage PIM interface configuration</p>
 <ul>
 <li>
 <p>On Ansible node (via SSH connection on MTputty), run the below command:</p>
-<p><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml --tags "vxlan"</code></p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml --tags "vxlan"
+</code></pre>
 </li>
 <li>
 <p>Below is a partial screenshot for the output of above command:</p>
@@ -956,25 +959,24 @@ nxos_pim_interface  Manage PIM interface configuration</p>
 <ul>
 <li>
 <p>On the Ansible server (using MTPutty) run this playbook by running the below command:</p>
-<p><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml --tags "evpn"</code></p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml --tags "evpn"
+</code></pre>
 <p>Below screenshot shows the output of above playbook:</p>
 <p><img alt="" src="../pic/4-6-1.png" /></p>
 </li>
 <li>
 <p>After successful execution of the playbook: <strong>login</strong> to <strong>any leaf or spine</strong> switch to verify BGP EVPN configuration and evpn negibor by using command: </p>
+<pre><code>show bgp l2vpn evpn summary
+</code></pre>
+<p>Below screenshot shows the output of above command from leaf-4 switch.  As expected it shows the spine-1 and spine-2 as neighbors:</p>
+<p><img alt="" src="../pic/4-6-2.png" /></p>
 </li>
 </ul>
-<p><code>show bgp l2vpn evpn summary</code></p>
-<pre><code>Below screenshot shows the output of above command from leaf-4 switch.  As expected it shows the spine-1 and spine-2 as neighbors:
-
-![](pic/4-6-2.png)
-</code></pre>
 <hr />
 <h3 id="step-11-run-nxos_fabric-playbook">Step 11: Run nxos_fabric playbook</h3>
 <ul>
-<li>
-<p>Up on this point, you have run the playbook during each step. You could re-run the whole playbook without giving any tags, but no new changes should be maded to the switches. </p>
-<p><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml</code></p>
+<li>Up on this point, you have run the playbook during each step. You could re-run the whole playbook without giving any tags, but no new changes should be maded to the switches. <pre><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook nxos_fabric.yml
+</code></pre>
 </li>
 </ul>
 <hr />

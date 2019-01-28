@@ -255,9 +255,10 @@
 </li>
 <li>
 <p>On the Ansible node (via MTPutty), run <strong>verify_fabric.yml</strong> playbook and verify the output for <strong>underlay</strong> by executing below command (using respective tag): </p>
+<pre><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook verify_fabric.yml --tags "underlay"
+</code></pre>
 </li>
 </ul>
-<p><code>[root@rhel7-tools LTRDCN-1572]# ansible-playbook verify_fabric.yml --tags "underlay"</code></p>
 <hr />
 <p><font style=background-color:yellow>The output shows ospf, bgp and pim neighbors for all leaf switches</font></p>
 <hr />
